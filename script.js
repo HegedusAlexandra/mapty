@@ -29,17 +29,27 @@ if (navigator.geolocation)
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
 
-      var marker = L.marker(coords).addTo(map);      
-      var popup = L.popup()
-        .setLatLng(coords)
-        .setContent("I am a standalone popup.")
-        .openOn(map);
+      function onMapClick(e) {
+        const { lat, lng } = e.latlng;
 
-    function onMapClick(e) {
-        alert("You clicked the map at " + e.latlng);
-    }
-    
-    map.on('click', onMapClick);
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: "running-popup"
+              /*  content: '<img width="200px" src="./Mapty-architecture-part-1.png" >' */
+            })
+          )
+          .setPopupContent('Workout')
+          .openPopup();
+        /* L.popup().setLatLng([lat, lng]).setContent("Workout").openOn(map); */
+      }
+
+      map.on("click", onMapClick);
     },
     function () {
       alert("Could not get your position");
